@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#080b20">
+<title>Live Video Call</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  touch-action: pan-y;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  background:
+    radial-gradient(ellipse at top, #304bd0 0%, transparent 48%),
+    linear-gradient(155deg, #101735, #070a18 78%);
+}
+
+.page {
+  width: 100%;
+  max-width: 680px;
+  margin: auto;
+  padding: 10px 11px 22px;
+  perspective: 1000px;
+}
+
+.hero {
+  text-align: center;
+  padding: 12px 0 24px;
+}
+
+.logo {
+  width: 165px;
+  height: 165px;
+  margin: 0 auto 20px;
+  border-radius: 35px;
+  border: 2px solid #b4ddff;
+  background: linear-gradient(145deg, #55b8ff, #5130df);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow:
+    0 10px 0 #19256b,
+    0 20px 35px #0009,
+    0 0 35px #488cff70,
+    inset 0 2px 5px #ffffff90;
+  animation: float3d 3s ease-in-out infinite;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-placeholder {
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 8px #10205b;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(30px, 8vw, 43px);
+  font-weight: 900;
+  text-shadow: 0 3px 0 #182b75, 0 0 25px #6495ff90;
+}
+
+.subtitle {
+  margin-top: 13px;
+  color: #d3ddff;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.card {
+  padding: 27px 18px;
+  border: 1px solid #a0b7ff45;
+  border-radius: 27px;
+  background: linear-gradient(145deg, #202d58, #10162f);
+  box-shadow:
+    0 12px 0 #090e25,
+    0 22px 40px #0008,
+    inset 0 1px 2px #ffffff20;
+  animation: cardEnter .8s ease-out both;
+}
+
+.badge {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 30px;
+  color: #a5ffe3;
+  background: linear-gradient(145deg, #176c5d, #104338);
+  border: 1px solid #51c9a5;
+  box-shadow: 0 4px 0 #092f2b;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+h2 {
+  margin: 23px 0 12px;
+  font-size: 27px;
+  line-height: 1.5;
+}
+
+.description {
+  margin: 0 0 20px;
+  color: #d0d9f1;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  margin: 22px 0;
+}
+
+.feature {
+  padding: 18px 9px;
+  text-align: center;
+  border: 1px solid #829cff40;
+  border-radius: 17px;
+  background: linear-gradient(145deg, #ffffff12, #ffffff04);
+  box-shadow: 0 5px 0 #0a1029, inset 0 1px 2px #ffffff15;
+}
+
+.feature strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.feature span {
+  color: #b9c8eb;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.details {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 22px 0 30px;
+  font-size: 15px;
+}
+
+.details td {
+  padding: 17px 5px;
+  border-bottom: 1px solid #ffffff20;
+  overflow-wrap: anywhere;
+}
+
+.details td:first-child {
+  width: 43%;
+  color: #b8c7e8;
+}
+
+.details td:last-child {
+  text-align: right;
+}
+
+/* BIG 3D DOWNLOAD BUTTON */
+.download {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 105px;
+  padding: 22px 12px;
+  overflow: hidden;
+  border: 2px solid #d5edff;
+  border-radius: 22px;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: clamp(23px, 6vw, 29px);
+  font-weight: 900;
+  letter-spacing: .5px;
+  background: linear-gradient(
+    180deg,
+    #83d0ff 0%,
+    #398aff 45%,
+    #2050d9 100%
+  );
+  box-shadow:
+    0 10px 0 #142e91,
+    0 17px 32px #246bff70,
+    inset 0 3px 5px #ffffffa0,
+    inset 0 -3px 5px #102f9a70;
+  text-shadow: 0 2px 4px #123b8c;
+  transition: transform .15s, box-shadow .15s;
+  animation: buttonGlow 2.5s ease-in-out infinite;
+}
+
+.download::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(
+    110deg,
+    transparent,
+    #ffffff85,
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: shine 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.download:active {
+  transform: translateY(7px);
+  box-shadow:
+    0 3px 0 #142e91,
+    0 7px 15px #246bff40,
+    inset 0 2px 4px #ffffff70;
+}
+
+.download small {
+  display: block;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 600;
+  color: #edf6ff;
+  text-shadow: none;
+}
+
+.download .download-icon {
+  font-size: 31px;
+  line-height: 1;
+  filter: drop-shadow(0 3px 2px #173b9b);
+}
+
+.status {
+  text-align: center;
+  color: #b8c6e5;
+  font-size: 13px;
+  line-height: 1.9;
+  margin: 16px 0 0;
+}
+
+.note {
+  margin: 21px 0 0;
+  text-align: center;
+  color: #b8c6e5;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.footer {
+  text-align: center;
+  color: #91a1c7;
+  font-size: 13px;
+  padding: 23px 0 5px;
+}
+
+@keyframes float3d {
+  0%, 100% {
+    transform: translateY(0) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotateX(3deg) rotateY(-3deg);
+  }
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shine {
+  0%, 25% { left: -120%; }
+  60%, 100% { left: 160%; }
+}
+
+@keyframes buttonGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.12); }
+}
+
+@media (max-width: 360px) {
+  .page { padding: 10px 9px 17px; }
+  .logo { width: 140px; height: 140px; }
+  .card { padding: 22px 14px; }
+  h2 { font-size: 23px; }
+  .download { min-height: 96px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="hero">
+    <div class="logo">
+      <span class="logo-placeholder">APP</span>
+      <!-- নিজের logo.png ব্যবহার করতে span সরিয়ে নিচের লাইন চালু করুন:
+      <img src="logo.png" alt="App Logo">
+      -->
+    </div>
+
+    <h1>Live Video Call</h1>
+
+    <div class="subtitle">
+      নতুন অভিজ্ঞতা শুরু করুন<br>
+      আপনার Android ফোন থেকেই
+    </div>
+  </header>
+
+  <main class="card">
+
+    <span class="badge">ANDROID APP</span>
+
+    <h2>আপনার বিনোদন, হাতের মুঠোয়</h2>
+
+    <p class="description">
+      ফ্রিতে ভিডিও চ্যাট করতে এবং নতুন মানুষের সঙ্গে
+      পরিচিত হতে অ্যাপটি ডাউনলোড করুন। ইনস্টল করে
+      অ্যাপটি খুলুন এবং আপনার পছন্দের ফিচারগুলো উপভোগ করুন।
+    </p>
+
+    <div class="features">
+      <div class="feature">
+        <strong>ভিডিও চ্যাট</strong>
+        <span>ভিডিও কলের সুবিধা</span>
+      </div>
+
+      <div class="feature">
+        <strong>সহজ ব্যবহার</strong>
+        <span>Android ফোনের জন্য</span>
+      </div>
+
+      <div class="feature">
+        <strong>সহজ ইনস্টল</strong>
+        <span>APK ফাইলের মাধ্যমে</span>
+      </div>
+
+      <div class="feature">
+        <strong>শুরু করুন</strong>
+        <span>ডাউনলোড করে অ্যাপ খুলুন</span>
+      </div>
+    </div>
+
+    <table class="details">
+      <tr>
+        <td>অ্যাপের নাম</td>
+        <td>Live Video Call</td>
+      </tr>
+      <tr>
+        <td>ফাইলের ধরন</td>
+        <td>Android APK</td>
+      </tr>
+      <tr>
+        <td>ডাউনলোড সোর্স</td>
+        <td>GitHub</td>
+      </tr>
+    </table>
+
+    <a
+      class="download"
+      id="downloadButton"
+      href="https://github.com/Vau-creator/New/raw/refs/heads/main/Live_video_Call.apk"
+      rel="noopener">
+
+      <span class="download-icon" aria-hidden="true">↓</span>
+      <span>DOWNLOAD APK</span>
+      <small>এখানে চাপ দিন — ডাউনলোড শুরু করুন</small>
+    </a>
+
+    <p class="status" id="voiceStatus" aria-live="polite">
+      পেজে ট্যাপ করলে ডাউনলোডের নির্দেশনা শোনানো হবে।
+    </p>
+
+    <p class="note">
+      APK ইনস্টল করার আগে ফাইলের উৎস ও নিরাপত্তা যাচাই করুন।
+      ভিডিও চ্যাটে অন্য ব্যক্তির সম্মতি ও গোপনীয়তা বজায় রাখুন।
+      অ্যাপটি বিনামূল্যে কি না, তা অ্যাপের ভেতরের শর্তের ওপর নির্ভর করে।
+    </p>
+
+  </main>
+
+  <footer class="footer">
+    © 2026 · Live Video Call
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  const status = document.getElementById("voiceStatus");
+  const downloadButton = document.getElementById("downloadButton");
+
+  let voices = [];
+  let voiceReady = false;
+  let lastSpoken = 0;
+
+  function loadVoices() {
+    if (!("speechSynthesis" in window)) return;
+    voices = window.speechSynthesis.getVoices();
+  }
+
+  function chooseBengaliVoice() {
+    return voices.find(v =>
+      /^bn([-_]|$)/i.test(v.lang) &&
+      /female|woman|zira|heera|samantha/i.test(v.name)
+    ) || voices.find(v =>
+      /^bn([-_]|$)/i.test(v.lang)
+    ) || null;
+  }
+
+  function speakInstruction() {
+    if (!("speechSynthesis" in window)) {
+      status.textContent =
+        "এই ব্রাউজারে ভয়েস সুবিধা পাওয়া যাচ্ছে না।";
+      return;
+    }
+
+    const now = Date.now();
+
+    // দ্রুত একাধিকবার ট্যাপ করলে একই কথা বারবার বাজবে না
+    if (now - lastSpoken < 2500) return;
+    lastSpoken = now;
+
+    loadVoices();
+
+    const voice = chooseBengaliVoice();
+
+    window.speechSynthesis.cancel();
+
+    const message = new SpeechSynthesisUtterance(
+      "অ্যাপটি ডাউনলোড করতে ডাউনলোড এ পি কে বাটনে চাপ দিন। " +
+      "ডাউনলোড শেষ হলে ফাইলটি খুলে ইনস্টল করুন। " +
+      "এরপর অ্যাপটি চালু করে আপনার পছন্দের ফিচার উপভোগ করুন।"
+    );
+
+    message.lang = voice ? voice.lang : "bn-BD";
+
+    if (voice) message.voice = voice;
+
+    message.rate = 0.9;
+    message.pitch = 1.1;
+
+    message.onstart = function () {
+      status.textContent = "ডাউনলোড নির্দেশনা চলছে...";
+    };
+
+    message.onend = function () {
+      status.textContent =
+        "নির্দেশনা শেষ। ডাউনলোড করতে নীল বাটনে চাপ দিন।";
+    };
+
+    message.onerror = function () {
+      status.textContent =
+        "ভয়েস চালু হয়নি। ব্রাউজারের ভয়েস সেটিংস পরীক্ষা করুন।";
+    };
+
+    window.speechSynthesis.speak(message);
+  }
+
+  if ("speechSynthesis" in window) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+
+  // প্রথম ব্যবহারকারীর ট্যাপেই ভয়েস চালানোর চেষ্টা
+  document.addEventListener("click", function (event) {
+    // ডাউনলোড বাটনে চাপ দিলে ডাউনলোডের কাজ বাধাগ্রস্ত করা হবে না
+    if (downloadButton.contains(event.target)) return;
+
+    speakInstruction();
+  });
+
+  // স্ক্রিনে টাচ করলে, ক্লিক ইভেন্টের মাধ্যমে ভয়েস চালু হবে
+  // আলাদা ভয়েস বাটন নেই।
+})();
+</script>
+
+</body>
+</html>
